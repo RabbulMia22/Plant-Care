@@ -7,6 +7,7 @@ import Register from "./pages/Register"
 import AddPlant from "./pages/AddPlant"
 import AllPlants from "./pages/AllPlants"
 import MyPlants from "./pages/MyPlants"
+import AuthProvider from "./context/AuthProvider"
 
 function App() {
   const router = createBrowserRouter([
@@ -43,7 +44,9 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router}/>
+     <AuthProvider>
+       <RouterProvider router={router}/>
+     </AuthProvider>
     </>
   )
 }

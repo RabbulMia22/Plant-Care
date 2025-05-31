@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaLeaf, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import { AuthContext } from '../../context/AuthProvider';
 
 function Navbar() {
+  const {user, logOut} = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        console.log('User logged out');
+      })
+      .catch((error) => {
+        console.error('Error logging out:', error);
+      });
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   return (
@@ -72,7 +85,12 @@ function Navbar() {
             >
               My Plants
             </NavLink>
-            <NavLink
+           {
+          user ? <button onClick={handleLogout} className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors duration-200">
+            Signout 
+          </button>
+            : <button >
+              <NavLink
               to="/login"
               className={({ isActive }) =>
                 `flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${isActive
@@ -84,6 +102,10 @@ function Navbar() {
               <FaSignInAlt className="mr-2 text-emerald-500" />
               Login
             </NavLink>
+
+            </button>
+        }
+
 
             {/* Register Button */}
             <NavLink
@@ -106,13 +128,18 @@ function Navbar() {
               </svg>
             </button>
           </div>
-           <div className='flex justify-center items-center md:ml-4'>
+           <div className='flex justify-center items-center md:ml-4 gap-5'>
             <ThemeToggle />
-
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+        <div className="w-10 rounded-full">
+          <img
+            alt="Tailwind CSS Navbar component"
+            src={user?.photoURL ? user.photoURL: "" } />
+        </div>
+      </div>
            </div>
         </div>
       </div>
-     
 
       {
         isOpen && (
